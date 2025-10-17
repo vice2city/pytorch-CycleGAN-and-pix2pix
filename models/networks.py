@@ -123,8 +123,8 @@ def init_net(net, init_type="normal", init_gain=0.02):
             net.to(local_rank)
             print(f"Initialized with device cuda:{local_rank}")
         else:
-            net.to(0)
-            print("Initialized with device cuda:0")
+            net.to(3)
+            print("Initialized with device cuda:3")
     init_weights(net, init_type, init_gain=init_gain)
     return net
 

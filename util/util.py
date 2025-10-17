@@ -61,8 +61,8 @@ def init_ddp():
         device = torch.device(f"cuda:{local_rank}")
         torch.cuda.set_device(local_rank)
     elif torch.cuda.is_available():
-        device = torch.device("cuda:0")
-        torch.cuda.set_device(0)
+        device = torch.device("cuda:3")
+        torch.cuda.set_device(3)
     else:
         device = torch.device("cpu")
     print(f"Initialized with device {device}")
