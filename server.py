@@ -37,8 +37,14 @@ def load_model_on_startup():
     print("Model loaded successfully!")
 
 
+class ProcessedImage(BaseModel):
+    """定义一个包含文件名和图片数据的对象"""
+    filename: str
+    image_data: str  # Base64 编码的图片字符串
+
 class ImagesResponse(BaseModel):
-    images: List[str] # 返回 base64 编码的图片列表
+    """响应体，包含一个 ProcessedImage 对象的列表"""
+    processed_images: List[ProcessedImage]
 
 def tensor_to_base64(tensor_image):
     """将 PyTorch tensor 转换成 base64 字符串"""
@@ -65,12 +71,13 @@ async def predict(files: List[UploadFile] = File(...)):
     global model, opt
     if opt is None or model is None:
         return {"message": "Model is not loaded yet."}
-    processed_images_base64 = []
+    processed_results = []
     transform = None
     print(f"Received {len(files)} files for processing.")
 
     for file in files:
-        print(f"Processing file: {file.filename}")
+        original_filename = file.filename
+        print(f"Processing image: {original_filename}")
         # 读取上传的图片
         contents = await file.read()
         image = Image.open(io.BytesIO(contents)).convert('RGB')
@@ -90,10 +97,12 @@ async def predict(files: List[UploadFile] = File(...)):
 
         # 结果后处理
         base64_image = tensor_to_base64(output_tensor)
-        processed_images_base64.append(base64_image)
+        processed_results.append(
+            ProcessedImage(filename=original_filename, image_data=base64_image)
+        )
 
-    print("Processing complete, returning results.")    
-    return ImagesResponse(images=processed_images_base64)
+    print("Processing complete, returning results.")
+    return ImagesResponse(processed_images=processed_results)
 
 @app.get("/")
 def read_root():
