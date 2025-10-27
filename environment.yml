@@ -17,4 +17,4 @@ dependencies:
       - fastapi
       - uvicorn[standard]
       - python-multipart
-prefix: /opt/conda/envs/pytorch
+prefix: /opt/conda/envs/opt2sar
