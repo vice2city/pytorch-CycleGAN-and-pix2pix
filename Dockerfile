@@ -1,11 +1,11 @@
 FROM condaforge/miniforge3:latest
 
-WORKDIR /app/20250612
+WORKDIR /app/pytorch-CycleGAN-and-pix2pix
 COPY environment.yml .
 RUN mamba env create -f environment.yml && \
     mamba clean --all -f -y
 
 SHELL ["/bin/bash", "--login", "-c"]
-RUN echo "mamba activate 20250612" >> ~/.bashrc
-ENV PATH=/opt/conda/envs/20250612/bin:$PATH
-ENV MAMBA_DEFAULT_ENV=20250612
+RUN echo "mamba activate opt2sar" >> ~/.bashrc
+ENV PATH=/opt/conda/envs/opt2sar/bin:$PATH
+ENV MAMBA_DEFAULT_ENV=opt2sar
